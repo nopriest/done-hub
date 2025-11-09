@@ -35,17 +35,6 @@ const Login = () => {
                     </Link>
                   </Grid>
                   <Grid item xs={12}>
-                    <Grid container direction={matchDownSM ? 'column-reverse' : 'row'} alignItems="center" justifyContent="center">
-                      <Grid item>
-                        <Stack alignItems="center" justifyContent="center" spacing={1}>
-                          <Typography color={theme.palette.primary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
-                            {t('menu.login')}
-                          </Typography>
-                        </Stack>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12}>
                     <AuthLogin />
                   </Grid>
                   <Grid item xs={12}>

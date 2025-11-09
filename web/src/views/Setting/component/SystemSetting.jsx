@@ -54,6 +54,8 @@ const SystemSetting = () => {
     PaymentCallbackAddress: '',
     Footer: '',
     WeChatAuthEnabled: '',
+    WeChatRegisterEnabled: '',
+    WebAuthnEnabled: '',
     WeChatServerAddress: '',
     WeChatServerToken: '',
     WeChatAccountQRCodeImageURL: '',
@@ -113,6 +115,8 @@ const SystemSetting = () => {
       case 'GitHubOAuthEnabled':
       case 'GitHubOldIdCloseEnabled':
       case 'WeChatAuthEnabled':
+      case 'WeChatRegisterEnabled':
+      case 'WebAuthnEnabled':
       case 'LarkAuthEnabled':
       case 'OIDCAuthEnabled':
       case 'LinuxDoOAuthEnabled':
@@ -418,6 +422,20 @@ const SystemSetting = () => {
                 label={t('setting_index.systemSettings.configureLoginRegister.weChatAuth')}
                 control={<Checkbox checked={inputs.WeChatAuthEnabled === 'true'} onChange={handleInputChange}
                                    name="WeChatAuthEnabled"/>}
+              />
+            </Grid>
+            <Grid xs={12} md={3}>
+              <FormControlLabel
+                label="微信注册绿色通道"
+                control={<Checkbox checked={inputs.WeChatRegisterEnabled === 'true'} onChange={handleInputChange}
+                                   name="WeChatRegisterEnabled"/>}
+              />
+            </Grid>
+            <Grid xs={12} md={3}>
+              <FormControlLabel
+                label="WebAuthn"
+                control={<Checkbox checked={inputs.WebAuthnEnabled === 'true'} onChange={handleInputChange}
+                                   name="WebAuthnEnabled"/>}
               />
             </Grid>
             <Grid xs={12} md={3}>

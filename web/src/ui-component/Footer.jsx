@@ -17,18 +17,8 @@ const Footer = () => {
           <div className="custom-footer" dangerouslySetInnerHTML={{ __html: siteInfo.footer_html }}></div>
         ) : (
           <>
-            <Link href="https://github.com/deanxv/done-hub" target="_blank">
-              {siteInfo.system_name} {import.meta.env.VITE_APP_VERSION}{' '}
-            </Link>
-            {t('footer.developedBy')}{' '}
-            <Link href="https://github.com/deanxv" target="_blank">
-              deanxv
-            </Link>
-            ，{t('footer.basedOn')}{' '}
-            <Link href="https://github.com/MartialBE" target="_blank">
-              MartialBE
-            </Link>{' '}
-            One Hub，{t('footer.sourceCode')}
+            {t('footer.basedOn')}done-hub,{' '}
+            {t('footer.sourceCode')}
             <Link href="https://opensource.org/licenses/mit-license.php"> {t('footer.license')}</Link>
           </>
         )}

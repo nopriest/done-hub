@@ -216,176 +216,182 @@ const LoginForm = ({ ...others }) => {
               </AnimateButton>
             </Grid>
           )}
-          <Grid item xs={12}>
-            <Box
-              sx={{
-                alignItems: 'center',
-                display: 'flex'
-              }}
-            >
-              <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-
-              <Button
-                variant="outlined"
+          {siteInfo.password_login_enabled && (
+            <Grid item xs={12}>
+              <Box
                 sx={{
-                  cursor: 'unset',
-                  m: 2,
-                  py: 0.5,
-                  px: 7,
-                  borderColor: `${theme.palette.grey[100]} !important`,
-                  color: `${theme.palette.grey[900]}!important`,
-                  fontWeight: 500,
-                  borderRadius: `${customization.borderRadius}px`
+                  alignItems: 'center',
+                  display: 'flex'
                 }}
-                disableRipple
-                disabled
               >
-                OR
-              </Button>
+                <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
 
-              <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-            </Box>
-          </Grid>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    cursor: 'unset',
+                    m: 2,
+                    py: 0.5,
+                    px: 7,
+                    borderColor: `${theme.palette.grey[100]} !important`,
+                    color: `${theme.palette.grey[900]}!important`,
+                    fontWeight: 500,
+                    borderRadius: `${customization.borderRadius}px`
+                  }}
+                  disableRipple
+                  disabled
+                >
+                  OR
+                </Button>
+
+                <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
+              </Box>
+            </Grid>
+          )}
         </Grid>
       )}
 
-      <Formik
-        initialValues={{
-          username: '',
-          password: '',
-          submit: null
-        }}
-        validationSchema={Yup.object().shape({
-          username: Yup.string().max(255).required(t('login.usernameRequired')),
-          password: Yup.string().max(255).required(t('login.passwordRequired'))
-        })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          const { success, message } = await login(values.username, values.password);
-          if (success) {
-            setStatus({ success: true });
-          } else {
-            setStatus({ success: false });
-            if (message) {
-              setErrors({ submit: message });
+      {siteInfo.password_login_enabled && (
+        <Formik
+          initialValues={{
+            username: '',
+            password: '',
+            submit: null
+          }}
+          validationSchema={Yup.object().shape({
+            username: Yup.string().max(255).required(t('login.usernameRequired')),
+            password: Yup.string().max(255).required(t('login.passwordRequired'))
+          })}
+          onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+            const { success, message } = await login(values.username, values.password);
+            if (success) {
+              setStatus({ success: true });
+            } else {
+              setStatus({ success: false });
+              if (message) {
+                setErrors({ submit: message });
+              }
             }
-          }
-          setSubmitting(false);
-        }}
-      >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setErrors, setStatus }) => (
-          <form noValidate onSubmit={handleSubmit} {...others}>
-            <FormControl fullWidth error={Boolean(touched.username && errors.username)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-username-login">{t('login.usernameOrEmail')}</InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-username-login"
-                type="text"
-                value={values.username}
-                name="username"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                label={t('login.usernameOrEmail')}
-                inputProps={{ autoComplete: 'username' }}
-              />
-              {touched.username && errors.username && (
-                <FormHelperText error id="standard-weight-helper-text-username-login">
-                  {errors.username}
-                </FormHelperText>
-              )}
-            </FormControl>
+            setSubmitting(false);
+          }}
+        >
+          {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setErrors, setStatus }) => (
+            <form noValidate onSubmit={handleSubmit} {...others}>
+              <FormControl fullWidth error={Boolean(touched.username && errors.username)} sx={{ ...theme.typography.customInput }}>
+                <InputLabel htmlFor="outlined-adornment-username-login">{t('login.usernameOrEmail')}</InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-username-login"
+                  type="text"
+                  value={values.username}
+                  name="username"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  label={t('login.usernameOrEmail')}
+                  inputProps={{ autoComplete: 'username' }}
+                />
+                {touched.username && errors.username && (
+                  <FormHelperText error id="standard-weight-helper-text-username-login">
+                    {errors.username}
+                  </FormHelperText>
+                )}
+              </FormControl>
 
-            <FormControl fullWidth error={Boolean(touched.password && errors.password)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-password-login">{t('login.password')}</InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password-login"
-                type={showPassword ? 'text' : 'password'}
-                value={values.password}
-                name="password"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                      size="large"
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
-              />
-              {touched.password && errors.password && (
-                <FormHelperText error id="standard-weight-helper-text-password-login">
-                  {errors.password}
-                </FormHelperText>
-              )}
-            </FormControl>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-              <Typography
-                component={Link}
-                to="/reset"
-                variant="subtitle1"
-                color="primary"
-                sx={{ textDecoration: 'none', cursor: 'pointer' }}
-              >
-                {t('login.forgetPassword')}
-              </Typography>
-            </Stack>
-            {errors.submit && (
-              <Box sx={{ mt: 3 }}>
-                <FormHelperText error>{errors.submit}</FormHelperText>
-              </Box>
-            )}
-
-            <Box sx={{ mt: 2 }}>
-              <AnimateButton>
-                <Button
-                  disableElevation
-                  disabled={isSubmitting}
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
-                >
-                  {isSubmitting ? t('login.loggingIn') : t('menu.login')}
-                </Button>
-              </AnimateButton>
-            </Box>
-
-            <Box sx={{ mt: 2 }}>
-              <AnimateButton>
-                <Button
-                  disableElevation
-                  fullWidth
-                  onClick={() =>
-                    onWebAuthnClicked(
-                      values.username,
-                      (msg) => setErrors({ submit: msg }),
-                      (msg) => setStatus({ success: true, message: msg }),
-                      () => {}
-                    )
+              <FormControl fullWidth error={Boolean(touched.password && errors.password)} sx={{ ...theme.typography.customInput }}>
+                <InputLabel htmlFor="outlined-adornment-password-login">{t('login.password')}</InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password-login"
+                  type={showPassword ? 'text' : 'password'}
+                  value={values.password}
+                  name="password"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                        size="large"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
                   }
-                  size="large"
-                  variant="outlined"
-                  sx={{
-                    ...theme.typography.LoginButton
-                  }}
+                  label="Password"
+                />
+                {touched.password && errors.password && (
+                  <FormHelperText error id="standard-weight-helper-text-password-login">
+                    {errors.password}
+                  </FormHelperText>
+                )}
+              </FormControl>
+              <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
+                <Typography
+                  component={Link}
+                  to="/reset"
+                  variant="subtitle1"
+                  color="primary"
+                  sx={{ textDecoration: 'none', cursor: 'pointer' }}
                 >
-                  <Box sx={{ mr: { xs: 1, sm: 2, width: 20 }, display: 'flex', alignItems: 'center' }}>
-                    <img src={Webauthn} alt="WebAuthn" width={25} height={25} style={{ marginRight: matchDownSM ? 8 : 16 }} />
-                  </Box>
-                  WebAuthn
-                </Button>
-              </AnimateButton>
-            </Box>
-          </form>
-        )}
-      </Formik>
+                  {t('login.forgetPassword')}
+                </Typography>
+              </Stack>
+              {errors.submit && (
+                <Box sx={{ mt: 3 }}>
+                  <FormHelperText error>{errors.submit}</FormHelperText>
+                </Box>
+              )}
+
+              <Box sx={{ mt: 2 }}>
+                <AnimateButton>
+                  <Button
+                    disableElevation
+                    disabled={isSubmitting}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
+                  >
+                    {isSubmitting ? t('login.loggingIn') : t('menu.login')}
+                  </Button>
+                </AnimateButton>
+              </Box>
+
+              {siteInfo.webauthn_enabled && (
+                <Box sx={{ mt: 2 }}>
+                  <AnimateButton>
+                    <Button
+                      disableElevation
+                      fullWidth
+                      onClick={() =>
+                        onWebAuthnClicked(
+                          values.username,
+                          (msg) => setErrors({ submit: msg }),
+                          (msg) => setStatus({ success: true, message: msg }),
+                          () => {}
+                        )
+                      }
+                      size="large"
+                      variant="outlined"
+                      sx={{
+                        ...theme.typography.LoginButton
+                      }}
+                    >
+                      <Box sx={{ mr: { xs: 1, sm: 2, width: 20 }, display: 'flex', alignItems: 'center' }}>
+                        <img src={Webauthn} alt="WebAuthn" width={25} height={25} style={{ marginRight: matchDownSM ? 8 : 16 }} />
+                      </Box>
+                      WebAuthn
+                    </Button>
+                  </AnimateButton>
+                </Box>
+              )}
+            </form>
+          )}
+        </Formik>
+      )}
     </>
   );
 };
